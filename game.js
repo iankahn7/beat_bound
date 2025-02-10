@@ -25,6 +25,18 @@ backgroundImage.src = "background.jpg";  // Path to your background image
 const npcGif = new Image();
 npcGif.src = "anduFace.png";  // Path to your NPC GIF
 
+// Background Music
+const backgroundMusic = new Audio("streamBirds1.wav"); // Replace with your actual file
+backgroundMusic.loop = true;
+backgroundMusic.volume = 0.5;
+
+// Start music when the user interacts (fixes autoplay issues)
+window.addEventListener("click", () => {
+    backgroundMusic.play();
+}, { once: true });
+
+
+
 // Player setup
 const player = {
     x: 50,
@@ -242,7 +254,7 @@ function draw() {
     ctx.drawImage(playerSprites[player.currentFrame], player.x, player.y, player.width, player.height);
 
     // Draw NPCs (GIFs and walking man sprites)
-    drawNPCs();
+    //drawNPCs();
 }
 
 function gameLoop() {
