@@ -25,16 +25,70 @@ backgroundImage.src = "background.jpg";  // Path to your background image
 const npcGif = new Image();
 npcGif.src = "anduFace.png";  // Path to your NPC GIF
 
+
+// Background Audio
+const backgroundAudio = new Audio("pianoLongloop.wav"); // Replace with your actual file
+backgroundAudio.loop = true;
+backgroundAudio.volume = 0.3;
+
+
 // Background Music
 const backgroundMusic = new Audio("streamBirds1.wav"); // Replace with your actual file
 backgroundMusic.loop = true;
-backgroundMusic.volume = 0.5;
+backgroundMusic.volume = 0.2;
+
+
+// Variables for the typing effect
+let message = "welcome to beat bound...."; // Message to be typed
+let typedMessage = ""; // Current typed part of the message
+let typingSpeed = 150; // Speed at which the text appears (in milliseconds)
+let gameStarted = false;  // Flag to check if game has started
+
+
+
+// Function to simulate typing effect
+function typeMessage() {
+    if (typedMessage.length < message.length) {
+        typedMessage += message.charAt(typedMessage.length); // Add one character at a time
+    }
+}
+
+// Function to display the typed message
+function drawTypingMessage() {
+    ctx.font = "30px Arial";  // Set font size and style
+    ctx.fillStyle = "white"; // Text color
+    ctx.fillText(typedMessage, canvas.width / 2 - ctx.measureText(typedMessage).width / 2, canvas.height / 2); // Center the message
+}
+
+
+// Start typing effect when the game begins
+function startGame() {
+    gameStarted = true;
+    setInterval(typeMessage, typingSpeed); // Type every 100ms
+}
+
+
+// Start typing effect when the game begins
+setInterval(typeMessage, typingSpeed); // Type every 100ms
+
 
 // Start music when the user interacts (fixes autoplay issues)
 window.addEventListener("click", () => {
+    backgroundAudio.play();
     backgroundMusic.play();
 }, { once: true });
 
+/* Player Action Effects */
+const jumpSound = new Audio("8bitJump.mp3"); // Replace with your actual file
+
+//volume control:
+jumpSound.volume = 0.1; 
+
+
+function playJumpSound() {
+    jumpSound.currentTime = 0; // Reset sound to allow quick replays
+    jumpSound.play();
+}
 
 
 // Player setup
@@ -205,6 +259,7 @@ function update() {
     if (keys["ArrowUp"] && player.grounded) {
         player.velocityY = player.jumpPower;
         player.grounded = false;
+        playJumpSound();
     }
 
     // Apply gravity
@@ -253,6 +308,10 @@ function draw() {
     // Draw player sprite
     ctx.drawImage(playerSprites[player.currentFrame], player.x, player.y, player.width, player.height);
 
+    if (gameStarted) {
+        drawTypingMessage();
+    } //typed message accross screen 
+    
     // Draw NPCs (GIFs and walking man sprites)
     //drawNPCs();
 }
